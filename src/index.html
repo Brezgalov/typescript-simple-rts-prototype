@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Webpack 4 Typescript boilerplate</title>
+    <link
+      rel="stylesheet"
+      href="<%=htmlWebpackPlugin.files.chunks.main.css %>"
+    />
+  </head>
+
+  <body>
+    <h1 class="center">Hello, world! It works!</h1>
+    <h2 class="center">
+      If u want to Change your Preproceesor check out the readme!
+    </h2>
+    <div id="mydiv"></div>
+
+    <div id="gamescreen">
+      <div id="gamefield">
+        <div id="unit-1"></div>
+      </div>
+    </div>
+
+    <style>
+      #gamescreen {
+        width: 90%; 
+        height: 500px; 
+        border: 1px solid black;
+        position: relative;
+        overflow: hidden
+      }
+
+      #gamefield {
+        width: 5000px; 
+        height: 5000px;
+        background-color: green;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      
+      #unit-1 {
+        width: 40px;
+        height: 40px;
+        background-color: blue;
+        top: 20px;
+        left: 10px;
+        position: absolute;
+      }
+    </style>
+
+    <script src="<%= htmlWebpackPlugin.files.chunks.main.entry %>"></script>
+  </body>
+</html>
