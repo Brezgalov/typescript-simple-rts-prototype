@@ -126,12 +126,12 @@ export default class GameObject {
    */
   public handleOrder(game: Game): void
   {
+    // убираем все выполненные приказы
+    this.updateOrdersQueue();
+
     if (this.orders.length <= 0) {
       return;
     }
-
-    // убираем все выполненные приказы
-    this.updateOrdersQueue();
 
     this.orders[0].execute(this, game);
   }

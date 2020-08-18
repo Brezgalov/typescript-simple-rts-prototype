@@ -38,20 +38,15 @@ export default abstract class BaseOrder
    */
   public execute(gameObject: GameObject, game: Game)
   {
-    this.isStarted = true;
-
     if (this.isDone) {
       return;
     }
+    
+    this.isStarted = true;
 
     this.applyToObject(gameObject, game);
 
     this.isDone = this.checkIsDone(gameObject, game);
-
-    // Запускаем следующий приказ
-    if (this.isDone) {
-      gameObject.handleOrder(game);
-    }
 
     return this.isDone;
   }

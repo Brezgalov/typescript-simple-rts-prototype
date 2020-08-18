@@ -1,8 +1,19 @@
 import GameObject from "Engine/Objects/GameObject";
 import GameMap from "Engine/GameMap";
+import GameRender from "./GameRender";
 
 export default class Game
 {
+  /**
+   * Таймер выполнения приказов
+   */
+  protected handleOrdersTimer: any;
+
+  /**
+   * Модуль рендера
+   */
+  protected render: GameRender;
+
   /**
    * ассоциативный массив объектов вида {id: объект}
    */
@@ -20,6 +31,14 @@ export default class Game
   public constructor(map: GameMap)
   {
     this.map = map;
+  }
+
+  /**
+   * Cписок зарегистрированных объектов
+   */
+  public getObjects()
+  {
+    return this.objects.values();
   }
 
   /**
@@ -136,10 +155,14 @@ export default class Game
   }
 
   /**
-   * Каждому из спрайтов объектов обновляем координаты
+   * Запускаем игру
    */
-  public updateObjectsPositions()
+  public start()
   {
-    
+    let game = this;
+
+    this.handleOrdersTimer = setInterval(function () { 
+      game.handleOrders();
+    }, 1);
   }
 }

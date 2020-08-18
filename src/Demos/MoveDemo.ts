@@ -18,6 +18,12 @@ export default class MoveDemo
     let testObject = new GameObject(1, { x: 3, y: 27, width: 50, height: 50 });
     let testObjectObstacle = new GameObject(2, { x: 100, y: 0, width: 50, height: 50 });
     
+    game.registerObject(testObject);
+    game.registerObject(testObjectObstacle);
+
+    console.log('start');
+    game.start();
+
     let moveOrder = new MoveOrder();
     moveOrder.tickRate = 1000;
     moveOrder.speed = 10;
@@ -28,12 +34,7 @@ export default class MoveDemo
     // Не соответствует скорости движения, объект все равно должен достичь
     moveOrder.toY = 2;  
 
+    console.log('order added');
     testObject.addOrder(moveOrder);
-
-    game.registerObject(testObject);
-    game.registerObject(testObjectObstacle);
-
-    console.log('game.handleOrders()');
-    game.handleOrders();
   }
 }

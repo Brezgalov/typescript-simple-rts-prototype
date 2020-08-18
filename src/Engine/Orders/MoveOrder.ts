@@ -113,11 +113,7 @@ export default class MoveOrder extends BaseOrder
         speedY
       );
       
-      moveOrder.isBlocked = !moveIsFree;
-
-      if (!moveOrder.isBlocked) {
-        game.updateObjectsPositions();
-      }     
+      moveOrder.isBlocked = !moveIsFree;   
       
       moveOrder.checkIsDone(gameObject, game);
     }, this.tickRate);
