@@ -5,6 +5,11 @@ import GameRender from "./GameRender";
 export default class Game
 {
   /**
+   * Частота обновления таймера разбора приказов
+   */
+  readonly ordersHandlingRate = 100;
+
+  /**
    * Таймер выполнения приказов
    */
   protected handleOrdersTimer: any;
@@ -163,6 +168,8 @@ export default class Game
 
     this.handleOrdersTimer = setInterval(function () { 
       game.handleOrders();
-    }, 1);
+    }, this.ordersHandlingRate);
+
+    this.render.start(game);
   }
 }

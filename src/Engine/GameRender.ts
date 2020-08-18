@@ -24,11 +24,15 @@ export default class GameRender
       return;
     }
 
-    let tickRate = 1000 / (this.fps ? this.fps : this.fpsDefault);
+    /**
+     * Разыменование для входа в таймер
+     */
+    let render = this;
 
     this.timer = setInterval(function () {
-      
-    }, tickRate);
+      var objects = game.getObjects();
+
+    }, 1000 / this.fpsDefault);
   }
 
   /**
