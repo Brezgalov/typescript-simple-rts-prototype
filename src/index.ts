@@ -1,18 +1,28 @@
 import './styles/style.scss';
-import Location from "Engine/Map/Location";
-import Point from "Engine/DataStructures/Point";
+import MoveDemo from 'Demos/MoveDemo';
 
-import $ = require("jquery");
+console.log('run move demo');
+let demo = new MoveDemo();
+demo.run();
+// import Location from "Engine/Map/Location";
+// import Point from "Engine/DataStructures/Point";
+// import Render from "Engine/Render";
 
-let div = document.getElementById("mydiv");
-console.log(div);
+// import $ = require("jquery");
 
-div.setAttribute("style", "color:red; border: 1px solid blue;");
+// let div = document.getElementById("mydiv");
+// console.log(div);
 
-console.log($('#gamescreen').css({'border-color': 'red'}));
+// div.setAttribute("style", "color:red; border: 1px solid blue;");
 
-let testLoc = new Location();
-let found = testLoc.getTilesInRadius(new Point(1, 1), 2, true);
+// console.log($('#gamescreen').css({'border-color': 'red'}));
 
-console.log('map', testLoc);
-console.log('found', found);
+// let testLoc = new Location();
+// let found = testLoc.getTilesInRadius(new Point(1, 1), 2, true);
+
+// console.log('map', testLoc);
+// console.log('found', found);
+
+// Render.renderLocation(testLoc);
+
+// div.setAttribute('style', 'margin-top: 50px');
