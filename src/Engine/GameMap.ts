@@ -1,5 +1,6 @@
 import GameObject from "./Objects/GameObject";
 import CollisionHelper2D from "./Helpers/CollisionHelper2D";
+import Game from "./Game";
 
 export default class GameMap
 {
@@ -73,8 +74,22 @@ export default class GameMap
     }
   }
 
-  public getLandscapeMoveByY(gameObject: GameObject, moveBy: number)
+  /**
+   * Возвращает список объектов находящихся на карте по дефолту
+   */
+  public getMapObjects(game: Game) : GameObject[]
   {
-    
+    return [];
+  }
+
+  /**
+   * Подгружает настройки карты
+   * @param game 
+   */
+  public load(game: Game)
+  {
+    for (let gameObject of this.getMapObjects(game)) {
+      game.registerObject(gameObject);
+    }
   }
 }

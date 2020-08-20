@@ -2,8 +2,9 @@ import GameMap from "Engine/GameMap";
 import Game from "Engine/Game";
 import GameObject from "Engine/Objects/GameObject";
 import MoveOrder from "Engine/Orders/MoveOrder";
+import AbstractDemo from "Demos/AbstractDemo";
 
-export default class MoveDemo 
+export default class MoveDemo extends AbstractDemo
 {
   //public mapSelector: string;
 

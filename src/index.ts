@@ -1,9 +1,21 @@
 import './styles/style.scss';
-import MoveDemo from 'Demos/MoveDemo';
+import MoveDemo from 'Demos/MoveDemo/MoveDemo';
+import AbstractDemo from "Demos/AbstractDemo";
+import RandomMoveDemo from 'Demos/RandomMoveDemo/RandomMoveDemo';
 
-console.log('run move demo');
-let demo = new MoveDemo();
+let demos = new Map<string, AbstractDemo>(); 
+
+demos.set('MoveDemo', new MoveDemo());
+demos.set('RandomMoveDemo', new RandomMoveDemo());
+
+
+let demoToRun = 'RandomMoveDemo';
+
+console.log('run ' + demoToRun);
+
+let demo = demos.get(demoToRun);
 demo.run();
+
 // import Location from "Engine/Map/Location";
 // import Point from "Engine/DataStructures/Point";
 // import Render from "Engine/Render";

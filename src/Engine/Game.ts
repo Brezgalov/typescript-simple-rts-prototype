@@ -10,6 +10,11 @@ export default class Game
   readonly ordersHandlingRate = 100;
 
   /**
+   * Последний выданный объекту ид
+   */
+  protected lastIdGiven = 0;
+
+  /**
    * Таймер выполнения приказов
    */
   protected handleOrdersTimer: any;
@@ -59,6 +64,16 @@ export default class Game
   public registerObject(gameObject: GameObject)
   {
     this.objects.set(gameObject.getId(), gameObject);
+  }
+
+  /**
+   * Генерирует ИД для объекта
+   */
+  public generateObjectId()
+  {
+    this.lastIdGiven += 1;
+
+    return this.lastIdGiven;
   }
 
   /**
@@ -171,6 +186,8 @@ export default class Game
   public start()
   {
     let game = this;
+
+    this.map.load(this);
 
     this.handleOrdersTimer = setInterval(function () { 
       game.handleOrders();
