@@ -29,9 +29,30 @@ export default class GameRender
      */
     let render = this;
 
+    let objectsRendered = new Map<number, boolean>();
+
+    let $ = require("jquery");
+
+    let mapElement = $('#' + game.mapHtmlId);
+    mapElement.css({
+      width: game.map.width + 'px',
+      height: game.map.height + 'px'
+    })
+
     this.timer = setInterval(function () {
       var objects = game.getObjects();
 
+      for (let gameObject of objects) {
+        if (!objectsRendered.has(gameObject.getId())) {
+          mapElement.append(gameObject.getHtmlView());
+
+          objectsRendered.set(gameObject.getId(), $('#'+gameObject.getId()));
+        }
+
+        gameObject.updateViewState(
+          objectsRendered.get(gameObject.getId())
+        )
+      }
     }, 1000 / this.fpsDefault);
   }
 

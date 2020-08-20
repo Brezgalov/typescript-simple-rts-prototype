@@ -25,7 +25,7 @@ export default class MoveDemo
     game.start();
 
     let moveOrder = new MoveOrder();
-    moveOrder.tickRate = 1000;
+    moveOrder.tickRate = 100;
     moveOrder.speed = 10;
 
     // Превышает, должен встать четко в 0

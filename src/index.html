@@ -20,7 +20,7 @@
 
     <div id="gamescreen">
       <div id="gamefield">
-        <div id="unit-1"></div>
+        
       </div>
     </div>
 
@@ -41,23 +41,14 @@
         top: 0;
         left: 0;
       }
-      
-      #unit-1 {
-        width: 40px;
-        height: 40px;
-        background-color: blue;
-        top: 20px;
-        left: 10px;
+
+      #gamefield > * {
         position: absolute;
       }
-
-      .tile {
-        display: block;
-        position: absolute;
-        width: 50px;
-        height: 50px;
-        background-color: white;
-        border: 1px solid black;
+      
+      .gameObject {
+        background: white;
+        transition: left 1s, top 1s;
       }
     </style>
 

@@ -9,7 +9,7 @@ export default class MoveOrder extends BaseOrder
 
   public speed: number = 1; // points per second
 
-  public tickRate: number = 100;
+  public tickRate: number = 1000;
   
   public toX: number = 0;
   

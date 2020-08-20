@@ -188,4 +188,34 @@ export default class GameObject {
       (y + height <= this.y) || (y >= this.y + this.height)
     );
   }
+
+  /**
+   * Возвращает базовое html представление объекта
+   */
+  public getHtmlView()
+  {
+    return '<div id=' + this.getId() + '></div>';  
+  }
+
+  /**
+   * Возвращает текущий класс соответствующих html представлению объекта
+   */
+  public getViewClass()
+  {
+    return 'gameObject';
+  }
+
+  /**
+   * Обновляет состояние $(html) представления объекта
+   * @param element 
+   */
+  public updateViewState(element: any)
+  {
+    return element.css({
+      'left': this.getX() + 'px',
+      'top': this.getY() + 'px',
+      'width': this.getWidth() + 'px',
+      'height': this.getHeight() + 'px'
+    }).addClass(this.getViewClass());
+  }
 }

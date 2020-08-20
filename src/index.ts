@@ -8,7 +8,7 @@ demo.run();
 // import Point from "Engine/DataStructures/Point";
 // import Render from "Engine/Render";
 
-// import $ = require("jquery");
+
 
 // let div = document.getElementById("mydiv");
 // console.log(div);

@@ -30,12 +30,18 @@ export default class Game
   public map: GameMap;
 
   /**
+   * Ид html элемента отвечающего за карту
+   */
+  public mapHtmlId: string = 'gamefield';
+
+  /**
    * constructor
    * @param map 
    */
   public constructor(map: GameMap)
   {
     this.map = map;
+    this.render = new GameRender();
   }
 
   /**
