@@ -87,7 +87,7 @@ export default class Game
   {
     let nextX = gameObject.getX() + speedX;
     let nextY = gameObject.getY() + speedY;
-
+    
     if (!this.map.sectorIsOnMap(nextX, nextY, gameObject.getWidth(), gameObject.getHeight())) {
       return false;
     } 
@@ -109,7 +109,7 @@ export default class Game
         // Если мы приближаемся к объекту слева, новая координата = его координната - наша ширина
         // Если мы приближаемся к объекту справа, новая координата = его координата + его ширина
 
-        if (!closestCollisionX || closestCollisionX < anotherGameObject.getX()) {   
+        if (!closestCollisionX || closestCollisionX !== null && closestCollisionX < anotherGameObject.getX()) {   
           if (speedX > 0) {
             closestCollisionX = anotherGameObject.getX() - gameObject.getWidth();
           } else if (speedX < 0) {
@@ -120,7 +120,7 @@ export default class Game
         // Если мы приближаемся к объекту снизу, новая координата = его координната - наша высота
         // Если мы приближаемся к объекту сверху, новая координата = его координата + его высота
 
-        if (!closestCollisionY || closestCollisionY < anotherGameObject.getY()) {
+        if (!closestCollisionY || closestCollisionY !== null && closestCollisionY < anotherGameObject.getY()) {
           if (speedY > 0) {
             closestCollisionY = anotherGameObject.getY() - gameObject.getHeight();
           } else if (speedY < 0) {

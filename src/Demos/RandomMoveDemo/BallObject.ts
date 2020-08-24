@@ -4,6 +4,6 @@ export default class BallObject extends GameObject
 {
   public getViewClass()
   {
-    return 'ball';
+    return 'gameObject randomMoveDemo ball';
   }
 }

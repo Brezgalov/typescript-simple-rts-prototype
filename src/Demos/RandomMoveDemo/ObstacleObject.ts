@@ -4,6 +4,6 @@ export default class ObstacleObject extends GameObject
 {
   public getViewClass()
   {
-    return 'obstacle';
+    return 'randomMoveDemo obstacle';
   }
 }

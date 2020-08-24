@@ -9,25 +9,34 @@ export default class MoveOrder extends BaseOrder
 
   public speed: number = 1; // points per second
 
-  public tickRate: number = 1000;
+  public tickRate: number = 100;
   
   public toX: number = 0;
   
   public toY: number = 0;
-  
+
   /**
    * Что-то блокирует проход
    */
   public isBlocked: boolean = false;
 
   /**
+   * сколько надо пройти за 1 тик
+   */
+  protected speedPointsPerTick: number;
+
+  /**
    * Определяем сколько надо пройти за 1 тик
    * х = ((this.speed / 1000) * tickRate) округляем до 2х знаков 
    * умножаем х на 100, отсекаем знаки после запятой и делим на 100 еще раз
    */
-  public getSpeedPointsPerTick(): number
+  public getSpeedPointsPerTick(update: boolean = false): number
   {
-    return Math.round(this.speed * this.tickRate / 10) / 100;
+    if (!this.speedPointsPerTick || update) {
+      this.speedPointsPerTick = Math.round(this.speed * this.tickRate / 10) / 100;
+    }
+
+    return this.speedPointsPerTick;
   }
 
   /**
@@ -54,14 +63,66 @@ export default class MoveOrder extends BaseOrder
       this.onBlocked(gameObject, game);
     }
 
-    let isDone = this.isBlocked || // Если движению что-то мешает - останавливаемся
-      gameObject.getX() == this.toX && gameObject.getY() == this.toY;
+    let isDone = this.isDoneCondition(gameObject, game);
     
     if (isDone) {
       this.stopTimer();
     }
     
     return isDone;
+  }
+
+  /**
+   * Условие проверки закончен ли приказ
+   * @param gameObject 
+   * @param game 
+   */
+  protected isDoneCondition(gameObject: GameObject, game: Game)
+  {
+    return this.isBlocked || // Если движению что-то мешает - останавливаемся
+      gameObject.getX() == this.toX && gameObject.getY() == this.toY;
+  }
+
+  /**
+   * Определяет стартовую скорость объекта при движении по Х
+   * @param gameObject 
+   */
+  protected getDefaultSpeedX(gameObject: GameObject)
+  {
+    let pointsToMove = this.getSpeedPointsPerTick();
+
+    return this.toX > gameObject.getX() ? pointsToMove : -1 * pointsToMove;
+  }
+
+  /**
+   * Определяет стартовую скорость объекта при движении по Y
+   * @param gameObject 
+   */
+  protected getDefaultSpeedY(gameObject: GameObject)
+  {
+    let pointsToMove = this.getSpeedPointsPerTick();
+
+    return this.toY > gameObject.getY() ? pointsToMove : -1 * pointsToMove
+  }
+
+  /**
+   * Поправляет скорость при приближении к точке назначения по Х
+   * @param toX 
+   * @param speed 
+   */
+  protected fixSpeedToDestinationByX(toX: number, speed: number)
+  {
+    return CollisionHelper2D.getMoveByCoord(toX, speed, this.toX);
+  }
+
+  /**
+   * Поправляет скорость при приближении к точке назначения по Х
+   * @param toY
+   * @param speed 
+   */
+  protected fixSpeedToDestinationByY(toY: number, speed: number)
+  {
+    return CollisionHelper2D.getMoveByCoord(toY, speed, this.toY);
   }
 
   /**
@@ -77,16 +138,17 @@ export default class MoveOrder extends BaseOrder
 
     // разыменование для входа внутрь таймера
     let moveOrder = this;
-    let pointsToMove = moveOrder.getSpeedPointsPerTick();
+    
+    this.speed = gameObject.getMoveSpeed();
 
-    let defaultSpeedX = this.toX > gameObject.getX() ? pointsToMove : -1 * pointsToMove;
-    let defaultSpeedY = this.toY > gameObject.getY() ? pointsToMove : -1 * pointsToMove;
+    let defaultSpeedX = this.getDefaultSpeedX(gameObject);
+    let defaultSpeedY = this.getDefaultSpeedY(gameObject);
 
     this.moveTimer = setInterval(function () {
       // Нужно остановиться, если следующая точка превышает необходимую координату
-      let speedX = CollisionHelper2D.getMoveByCoord(gameObject.getX(), defaultSpeedX, moveOrder.toX);
-      let speedY = CollisionHelper2D.getMoveByCoord(gameObject.getY(), defaultSpeedY, moveOrder.toY);
-
+      let speedX = moveOrder.fixSpeedToDestinationByX(gameObject.getX(), defaultSpeedX);
+      let speedY = moveOrder.fixSpeedToDestinationByY(gameObject.getY(), defaultSpeedY);
+      
       // Если точка находится за краем карты или препятствием карты
       // Объект не коснулся правым краем стены, но стоит очень близко
       // А скорость объекта больше расстояния до стены
@@ -95,7 +157,7 @@ export default class MoveOrder extends BaseOrder
       let speedData = game.map.getLandscapeMoveBy(gameObject, speedX, speedY);
       speedX = speedData.moveByX;
       speedY = speedData.moveByY;
-
+      
       // Если скорость упала до 0, а мы еще не достигли точки
       // Значит движение дальше не возможно
       if (speedX == 0 && speedY == 0 && !this.isDone) {

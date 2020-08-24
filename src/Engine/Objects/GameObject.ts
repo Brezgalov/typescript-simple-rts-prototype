@@ -26,6 +26,11 @@ export default class GameObject {
   protected orders: Array<BaseOrder> = [];
 
   /**
+   * Дефолтная скорость движения
+   */
+  protected defaultMoveSpeed: number = 0;
+
+  /**
    * Конструктор
    * @param id 
    * @param setup - объект с настройками свойств
@@ -35,7 +40,7 @@ export default class GameObject {
     this.id = id;
 
     if (setup) {
-      this.setupProperties(setup, ['width', 'height', 'x', 'y']);
+      this.setupProperties(setup, ['width', 'height', 'x', 'y', 'defaultMoveSpeed']);
     }
   }
 
@@ -59,6 +64,14 @@ export default class GameObject {
   public getId()
   {
     return this.id;
+  }
+
+  /**
+   * Возвращает дефолтную скорость движения объекта
+   */
+  public getMoveSpeed()
+  {
+    return this.defaultMoveSpeed;
   }
 
   /**
@@ -183,8 +196,13 @@ export default class GameObject {
   public hasCrossWithSector(x: number, y: number, width: number, height: number)
   {
     // Проще проверить, что сектора не пересекаются и инвертировать результат
+    // !(
+      // Мы либо правее либо левее по Х - тогда нет пересечения
+      // либо
+      // Мы либо выше либо ниже по Y - тогда нет пересечения
+    //)
     return !(
-      (x + width <= this.x) || (x >= this.x + this.width) &&
+      (x + width <= this.x) || (x >= this.x + this.width) ||
       (y + height <= this.y) || (y >= this.y + this.height)
     );
   }

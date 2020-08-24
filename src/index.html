@@ -12,10 +12,7 @@
   </head>
 
   <body>
-    <h1 class="center">Hello, world! It works!</h1>
-    <h2 class="center">
-      If u want to Change your Preproceesor check out the readme!
-    </h2>
+    <p class="center">Hello, world! It works!</p>
     <div id="mydiv"></div>
 
     <div id="gamescreen">
@@ -27,11 +24,12 @@
     <style>
       #gamescreen {
         width: 90%; 
-        height: 500px; 
+        height: 600px; 
         border: 1px solid black;
         background: #222222;
         position: relative;
         overflow: auto
+        
       }
 
       #gamefield {
@@ -52,8 +50,14 @@
         transition: left 1s, top 1s;
       }
 
-      .obstacle {
+      .randomMoveDemo.obstacle {
         background: darkred;
+        border: 1px solid black;
+      }
+      .randomMoveDemo.ball {
+        background: white;
+        border: 1px solid black;
+        border-radius: 25px;
       }
     </style>
 

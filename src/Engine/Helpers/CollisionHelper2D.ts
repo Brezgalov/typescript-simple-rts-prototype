@@ -13,7 +13,7 @@ export default class CollisionHelper2D
   public static getPossibleMoveByEdge(position: number, moveBy: number, maxCoord: number, minCoord: number = 0)
   {
     let nextCoord = position + moveBy;
-
+    
     if (nextCoord < minCoord && position >= minCoord) {
       return -1 * Math.abs(position - minCoord);
     } else if (nextCoord > maxCoord && position <= maxCoord) {
@@ -34,7 +34,7 @@ export default class CollisionHelper2D
   public static getMoveByCoord(position: number, moveBy: number, destination: number)
   {
     let nextCoord = position + moveBy;
-
+    
     if (moveBy > 0 && nextCoord > destination) {
       return Math.abs(destination - position);
     } else if (moveBy < 0 && nextCoord < destination) {
