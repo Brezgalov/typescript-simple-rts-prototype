@@ -143,7 +143,7 @@ export default class Game
 
     gameObject.setX(nextX);
     gameObject.setY(nextY);
-    
+
     console.log('object ' + gameObject.getId() + ' moved to:', { x: gameObject.getX(), y: gameObject.getY() });
     
     return !hasCollision; 

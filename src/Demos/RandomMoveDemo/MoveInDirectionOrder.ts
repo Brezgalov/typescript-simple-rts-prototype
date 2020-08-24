@@ -27,7 +27,7 @@ export default class MoveInDirectionOrder extends MoveOrder
    */
   protected isDoneCondition(gameObject: GameObject, game: Game)
   {
-    return this.isBlocked;
+    return this.isDone || this.isBlocked;
   }
 
   /**

@@ -153,7 +153,7 @@ export default class GameObject {
    * Обновляем очередь приказов убирая лишние
    */
   public updateOrdersQueue(): void
-  {
+  {  
     while (this.orders.length > 0 && this.orders[0].getIsDone()) {
       this.orders.splice(0, 1);
     }
@@ -162,7 +162,8 @@ export default class GameObject {
   /**
    * Очищаем список приказов
    */
-  public dropOrders(): void {
+  public dropOrders(): void
+  {
     if (this.orders.length > 0) {
       this.orders[0].stopProcessing();
     }

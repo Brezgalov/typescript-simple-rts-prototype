@@ -63,13 +63,14 @@ export default class MoveOrder extends BaseOrder
       this.onBlocked(gameObject, game);
     }
 
-    let isDone = this.isDoneCondition(gameObject, game);
-    
-    if (isDone) {
+    this.isDone = this.isDoneCondition(gameObject, game);
+
+    if (this.isDone) {
+      console.log('move ' + gameObject.getId() + ' is done');
       this.stopTimer();
     }
     
-    return isDone;
+    return this.isDone;
   }
 
   /**
@@ -160,8 +161,8 @@ export default class MoveOrder extends BaseOrder
       
       // Если скорость упала до 0, а мы еще не достигли точки
       // Значит движение дальше не возможно
-      if (speedX == 0 && speedY == 0 && !this.isDone) {
-        this.isBlocked = true;
+      if (speedX == 0 && speedY == 0 && !moveOrder.checkIsDone(gameObject, game)) {
+        moveOrder.isBlocked = true;
         moveOrder.checkIsDone(gameObject, game);
 
         return;
@@ -176,7 +177,6 @@ export default class MoveOrder extends BaseOrder
       );
       
       moveOrder.isBlocked = !moveIsFree;   
-      
       moveOrder.checkIsDone(gameObject, game);
     }, this.tickRate);
   }
