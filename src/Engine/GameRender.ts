@@ -1,4 +1,5 @@
 import Game from "Engine/Game";
+import GameTimer from "./GameTimer";
 
 export default class GameRender
 {
@@ -7,7 +8,7 @@ export default class GameRender
   /**
    * Таймер рендера
    */
-  protected timer:any;
+  protected timer: GameTimer;
 
   /**
    * Для расчета частоты отрисовки
@@ -20,14 +21,9 @@ export default class GameRender
    */
   public start(game: Game)
   {
-    if (this.timer) {
+    if (this.timer && this.timer.getIsActive()) {
       return;
     }
-
-    /**
-     * Разыменование для входа в таймер
-     */
-    let render = this;
 
     let objectsRendered = new Map<number, boolean>();
 
@@ -39,8 +35,8 @@ export default class GameRender
       height: game.map.height + 'px'
     })
 
-    this.timer = setInterval(function () {
-      var objects = game.getObjects();
+    this.timer = new GameTimer(function () {
+      let objects = game.getObjects();
 
       for (let gameObject of objects) {
         if (!objectsRendered.has(gameObject.getId())) {
@@ -54,17 +50,7 @@ export default class GameRender
         )
       }
     }, 1000 / this.fpsDefault);
-  }
 
-  /**
-   * Остановить отрисовку
-   */
-  public stop()
-  {
-    if (!this.timer) {
-      return;
-    }
-
-    clearInterval(this.timer);
+    game.registerGameTimer(this.timer, 'GameRendererTimer');
   }
 }

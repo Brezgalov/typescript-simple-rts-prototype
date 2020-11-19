@@ -1,7 +1,11 @@
 import BaseOrder from "Engine/Orders/BaseOrder";
 import Game from "Engine/Game";
 
-export default class GameObject {
+export default class GameObject
+{
+  /**
+   * Идентификатор
+   */
   protected id: number;
 
   /**

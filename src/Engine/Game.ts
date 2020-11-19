@@ -1,6 +1,7 @@
 import GameObject from "Engine/Objects/GameObject";
 import GameMap from "Engine/GameMap";
-import GameRender from "./GameRender";
+import GameRender from "Engine/GameRender";
+import GameTimer from "Engine/GameTimer";
 
 export default class Game
 {
@@ -12,7 +13,12 @@ export default class Game
   /**
    * Последний выданный объекту ид
    */
-  protected lastIdGiven = 0;
+  protected lastObjectIdGiven = 0;
+
+  /**
+   * Последний выданный таймеру ид
+   */
+  protected lastTimerIdGiven = 0;
 
   /**
    * Таймер выполнения приказов
@@ -25,7 +31,12 @@ export default class Game
   protected render: GameRender;
 
   /**
-   * ассоциативный массив объектов вида {id: объект}
+   * множество (реестр) игровых таймеров
+   */
+  protected timers: Map<string, GameTimer> = new Map<string, GameTimer>();
+
+  /**
+   * множество объектов вида {id: объект}
    */
   protected objects: Map<number, GameObject> = new Map<number, GameObject>();
 
@@ -71,9 +82,19 @@ export default class Game
    */
   public generateObjectId()
   {
-    this.lastIdGiven += 1;
+    this.lastObjectIdGiven += 1;
 
-    return this.lastIdGiven;
+    return this.lastObjectIdGiven;
+  }
+
+  /**
+   * Генерирует ИД для таймера
+   */
+  public generateGameTimerId()
+  {
+    this.lastTimerIdGiven += 1;
+
+    return this.lastTimerIdGiven;
   }
 
   /**
@@ -143,8 +164,6 @@ export default class Game
 
     gameObject.setX(nextX);
     gameObject.setY(nextY);
-
-    console.log('object ' + gameObject.getId() + ' moved to:', { x: gameObject.getX(), y: gameObject.getY() });
     
     return !hasCollision; 
   }
@@ -181,18 +200,69 @@ export default class Game
   }
 
   /**
+   * Инициализирует реестр таймеров
+   */
+  public setupGameTimersRegistry(): void
+  {
+    let game = this;
+
+    this.timers = new Map<string, GameTimer>()
+
+    this.registerGameTimer(
+      new GameTimer(
+        function () { 
+          game.handleOrders();
+        },
+        this.ordersHandlingRate
+      ),
+      'handleOrdersTimer'
+    );
+  }
+
+  /**
+   * Регистрирует таймер в системе и устанавливает его ид
+   * @param gameTimer 
+   * @param timerId 
+   */
+  public registerGameTimer(gameTimer: GameTimer, timerId: string = null, startOnRegister: boolean = true): void
+  {
+    if (!timerId) {
+      timerId = 't' + this.generateGameTimerId();
+    }
+
+    if (this.timers.has(timerId)) {
+      // Таймер нужно остановить, а то так и будет тикать
+      (this.timers.get(timerId)).stop();
+
+      this.timers.delete(timerId);
+    }
+
+    this.timers.set(timerId, gameTimer);
+
+    gameTimer.id = timerId;
+    if (startOnRegister) {
+      gameTimer.start();
+    }    
+  }
+
+  /**
+   * Возвращает таймер по его id
+   * @param timerId 
+   */
+  public getGameTimer(timerId: string)
+  {
+    return this.timers.get(timerId);
+  }
+
+  /**
    * Запускаем игру
    */
   public start()
   {
-    let game = this;
-
     this.map.load(this);
 
-    this.handleOrdersTimer = setInterval(function () { 
-      game.handleOrders();
-    }, this.ordersHandlingRate);
+    this.setupGameTimersRegistry();
 
-    this.render.start(game);
+    this.render.start(this);
   }
 }

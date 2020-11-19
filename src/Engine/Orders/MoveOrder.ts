@@ -2,17 +2,33 @@ import BaseOrder from "Engine/Orders/BaseOrder";
 import GameObject from "Engine/Objects/GameObject";
 import Game from "Engine/Game";
 import CollisionHelper2D from "Engine/Helpers/CollisionHelper2D";
+import GameTimer from "Engine/GameTimer";
 
 export default class MoveOrder extends BaseOrder
 {
-  protected moveTimer: any;
+  /**
+   * Таймер движения
+   */
+  protected moveTimer: GameTimer;
 
-  public speed: number = 1; // points per second
+  /**
+   * Сдвиг в (коорд/сек)
+   */
+  public speed: number = 1;
 
+  /**
+   * Частота обновления таймера в мс
+   */
   public tickRate: number = 100;
   
+  /**
+   * Координата назначения по X
+   */
   public toX: number = 0;
   
+  /**
+   * Координата назначения по У
+   */
   public toY: number = 0;
 
   /**
@@ -66,7 +82,6 @@ export default class MoveOrder extends BaseOrder
     this.isDone = this.isDoneCondition(gameObject, game);
 
     if (this.isDone) {
-      console.log('move ' + gameObject.getId() + ' is done');
       this.stopTimer();
     }
     
@@ -133,7 +148,8 @@ export default class MoveOrder extends BaseOrder
    */
   protected applyToObject(gameObject: GameObject, game: Game)
   {
-    if (this.moveTimer) {
+    // Если таймер установлен и активен - не трогаем его
+    if (this.moveTimer && this.moveTimer.getIsActive()) {
       return;
     }
 
@@ -145,7 +161,7 @@ export default class MoveOrder extends BaseOrder
     let defaultSpeedX = this.getDefaultSpeedX(gameObject);
     let defaultSpeedY = this.getDefaultSpeedY(gameObject);
 
-    this.moveTimer = setInterval(function () {
+    this.moveTimer = new GameTimer(function () {
       // Нужно остановиться, если следующая точка превышает необходимую координату
       let speedX = moveOrder.fixSpeedToDestinationByX(gameObject.getX(), defaultSpeedX);
       let speedY = moveOrder.fixSpeedToDestinationByY(gameObject.getY(), defaultSpeedY);
@@ -179,6 +195,8 @@ export default class MoveOrder extends BaseOrder
       moveOrder.isBlocked = !moveIsFree;   
       moveOrder.checkIsDone(gameObject, game);
     }, this.tickRate);
+
+    game.registerGameTimer(this.moveTimer, 'MoveOrder_Object' + gameObject.getId());
   }
 
   /**
@@ -186,9 +204,7 @@ export default class MoveOrder extends BaseOrder
    */
   public stopTimer(): void
   {
-    if (this.moveTimer) {
-      clearInterval(this.moveTimer);
-    } 
+    this.moveTimer.stop();
   }
 
   /**
