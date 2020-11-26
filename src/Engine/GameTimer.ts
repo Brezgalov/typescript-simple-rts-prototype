@@ -58,10 +58,21 @@ export default class GameTimer
   }
 
   /**
+   * Возвращает минимальную разницу между временем "старт" и "стоп"
+   * начиная с которой включется механизм задержки запуска
+   */
+  public getStartDelayEdge()
+  {
+    return 100;
+  }
+
+  /**
    * Расчет задержки старта таймера после остановки
    */
   protected calculateStartDelay(): number
   {
+    let edge = this.getStartDelayEdge();
+
     /**
      * Не применяем задержку
      *  если остановок не было
@@ -71,9 +82,9 @@ export default class GameTimer
      */ 
     if (
       !this.stopTime                        ||
-      this.rate < 100                       ||
+      this.rate < edge                      ||
       this.startTime > this.stopTime        ||
-      this.startTime - this.stopTime < 100
+      this.startTime - this.stopTime < edge
     ) {
       return 0;
     }
